@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Student Exam Performance Predictor</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=IBM+Plex+Mono:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F7F3E9;
+    --paper-line:#DCD3BC;
+    --card:#FFFDF8;
+    --ink:#232842;
+    --ink-soft:#6B6F8A;
+    --blue:#2955A3;
+    --green:#2F6F52;
+    --gold:#B8862E;
+    --red:#B23B34;
+  }
+
+  *{ box-sizing:border-box; }
+
+  @keyframes wash{
+    0%,100%{ background-position:0% 50%; }
+    50%{ background-position:100% 50%; }
+  }
+
+  body{
+    margin:0;
+    background:
+      repeating-linear-gradient(var(--paper) 0px, var(--paper) 31px, var(--paper-line) 32px),
+      linear-gradient(120deg, #F7F3E9, #F3EEE0, #F0F1E8, #F7F3E9);
+    background-size:auto, 300% 300%;
+    animation:wash 22s ease-in-out infinite;
+    color:var(--ink);
+    font-family:'IBM Plex Sans', sans-serif;
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:24px;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    body{ animation:none; }
+  }
+
+  @keyframes rise{
+    from{ opacity:0; transform:translateY(14px); }
+    to{ opacity:1; transform:translateY(0); }
+  }
+
+  .cover{
+    max-width:560px;
+    width:100%;
+    background:var(--card);
+    border:1px solid var(--paper-line);
+    border-radius:2px 18px 18px 18px;
+    box-shadow: 0 1px 0 var(--paper-line), 0 24px 50px -30px rgba(35,40,66,.5);
+    padding:52px 44px;
+    text-align:center;
+    position:relative;
+    animation:rise .6s ease both;
+    transition:box-shadow .3s ease, transform .3s ease;
+  }
+
+  .cover:hover{
+    transform:translateY(-3px);
+    box-shadow: 0 1px 0 var(--paper-line), 0 32px 60px -28px rgba(35,40,66,.6);
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .cover{ animation:none; }
+  }
+
+  .eyebrow{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    color:var(--green);
+    display:inline-block;
+    border:1px solid var(--paper-line);
+    border-radius:999px;
+    padding:6px 14px;
+    margin-bottom:22px;
+    transition:border-color .2s ease, background .2s ease;
+  }
+
+  .eyebrow:hover{
+    border-color:var(--green);
+    background:#E7F3EC;
+  }
+
+  h1{
+    font-family:'Fraunces', serif;
+    font-weight:700;
+    font-size:clamp(30px, 5vw, 42px);
+    line-height:1.1;
+    margin:0 0 14px;
+    background:linear-gradient(100deg, var(--ink) 0%, var(--blue) 55%, var(--green) 100%);
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+    background-size:200% auto;
+    animation:shine 6s ease-in-out infinite;
+  }
+
+  @keyframes shine{
+    0%,100%{ background-position:0% center; }
+    50%{ background-position:100% center; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    h1{ animation:none; }
+  }
+
+  p.lede{
+    color:var(--ink-soft);
+    font-size:15.5px;
+    line-height:1.6;
+    max-width:420px;
+    margin:0 auto 32px;
+  }
+
+  .cta{
+    display:inline-block;
+    font-family:'IBM Plex Mono', monospace;
+    font-weight:600;
+    font-size:13px;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    color:var(--paper);
+    background:linear-gradient(120deg, var(--ink), var(--blue));
+    background-size:180% 180%;
+    background-position:0% 50%;
+    border:none;
+    border-radius:999px;
+    padding:15px 36px;
+    text-decoration:none;
+    box-shadow:0 10px 24px -12px rgba(41,85,163,.55);
+    transition:background-position .4s ease, transform .15s ease, box-shadow .15s ease;
+  }
+
+  .cta:hover{
+    background-position:100% 50%;
+    transform:translateY(-2px);
+    box-shadow:0 14px 30px -12px rgba(41,85,163,.7);
+  }
+  .cta:active{ transform:scale(.96); }
+  .cta:focus-visible{ outline:3px solid var(--blue); outline-offset:3px; }
+
+  .stripe{
+    margin-top:34px;
+    padding-top:22px;
+    border-top:1px dashed var(--paper-line);
+    display:flex;
+    justify-content:center;
+    gap:22px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    letter-spacing:.04em;
+  }
+
+  .stripe span{
+    padding:4px 10px;
+    border-radius:6px;
+    transition:background .2s ease, color .2s ease;
+    cursor:default;
+  }
+  .stripe span:nth-child(1){ color:var(--blue); }
+  .stripe span:nth-child(2){ color:var(--green); }
+  .stripe span:nth-child(3){ color:var(--gold); }
+
+  .stripe span:hover{ background:var(--paper); }
+</style>
+</head>
+<body>
+
+  <div class="cover">
+    <span class="eyebrow">Record Book · Open</span>
+    <h1>Welcome to the Grade Book</h1>
+    <p class="lede">
+      Enter a student's demographic and academic details to predict their Maths score,
+      powered by a trained regression pipeline.
+    </p>
+    <a class="cta" href="{{ url_for('predict_datapoint') }}">Open a new record</a>
+
+    <div class="stripe">
+      <span>Gender</span>
+      <span>Ethnicity</span>
+      <span>Scores</span>
+    </div>
+  </div>
+
+</body>
+</html>

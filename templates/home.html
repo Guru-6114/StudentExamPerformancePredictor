@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Student Exam Performance — Record Card</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=IBM+Plex+Mono:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F7F3E9;
+    --paper-line:#DCD3BC;
+    --card:#FFFDF8;
+    --ink:#232842;
+    --ink-soft:#6B6F8A;
+    --blue:#2955A3;
+    --blue-soft:#EAF0FA;
+    --green:#2F6F52;
+    --gold:#B8862E;
+    --red:#B23B34;
+  }
+
+  *{ box-sizing:border-box; }
+
+  @keyframes wash{
+    0%,100%{ background-position:0% 50%; }
+    50%{ background-position:100% 50%; }
+  }
+
+  body{
+    margin:0;
+    background:
+      repeating-linear-gradient(var(--paper) 0px, var(--paper) 31px, var(--paper-line) 32px),
+      linear-gradient(120deg, #F7F3E9, #F3EEE0, #F0F1E8, #F7F3E9);
+    background-size:auto, 300% 300%;
+    animation:wash 22s ease-in-out infinite;
+    color:var(--ink);
+    font-family:'IBM Plex Sans', sans-serif;
+    min-height:100vh;
+    padding:56px 20px 80px;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    body{ animation:none; }
+  }
+
+  .sheet{ max-width:640px; margin:0 auto; position:relative; }
+
+  .tab{
+    display:inline-block;
+    background:var(--ink);
+    color:var(--paper);
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+    padding:7px 16px;
+    border-radius:6px 6px 0 0;
+    margin-bottom:-1px;
+    position:relative;
+    z-index:2;
+  }
+
+  .card{
+    background:var(--card);
+    border:1px solid var(--paper-line);
+    border-radius:2px 14px 14px 14px;
+    box-shadow: 0 1px 0 var(--paper-line), 0 18px 40px -28px rgba(35,40,66,.45);
+    padding:40px 36px 36px;
+    position:relative;
+    z-index:1;
+    transition:box-shadow .3s ease, transform .3s ease;
+  }
+
+  .card:hover{
+    box-shadow: 0 1px 0 var(--paper-line), 0 26px 54px -26px rgba(35,40,66,.55);
+    transform:translateY(-2px);
+  }
+
+  h1.title{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-size:clamp(28px, 4vw, 36px);
+    line-height:1.15;
+    margin:0 0 6px;
+    background:linear-gradient(90deg, var(--ink) 0%, var(--blue) 100%);
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+  }
+
+  .subtitle{
+    color:var(--ink-soft);
+    font-size:14px;
+    margin:0 0 32px;
+    border-bottom:1px solid var(--paper-line);
+    padding-bottom:24px;
+  }
+
+  @keyframes rise{
+    from{ opacity:0; transform:translateY(10px); }
+    to{ opacity:1; transform:translateY(0); }
+  }
+
+  .field-row{
+    display:grid;
+    grid-template-columns: 1fr 1.2fr;
+    align-items:center;
+    gap:16px;
+    padding:14px 0;
+    border-bottom:1px dashed var(--paper-line);
+    animation:rise .5s ease both;
+  }
+  .field-row:nth-of-type(1){ animation-delay:.03s; }
+  .field-row:nth-of-type(2){ animation-delay:.09s; }
+  .field-row:nth-of-type(3){ animation-delay:.15s; }
+  .field-row:nth-of-type(4){ animation-delay:.21s; }
+  .field-row:nth-of-type(5){ animation-delay:.27s; }
+  .field-row:nth-of-type(6){ animation-delay:.33s; }
+  .field-row:nth-of-type(7){ animation-delay:.39s; }
+
+  @media (prefers-reduced-motion: reduce){
+    .field-row{ animation:none; }
+  }
+
+  .field-row:last-of-type{ border-bottom:none; }
+
+  .field-index{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    color:var(--ink-soft);
+    display:block;
+    margin-bottom:2px;
+    transition:color .2s ease;
+  }
+
+  .field-row:focus-within .field-index{ color:var(--blue); }
+
+  label.form-label{ font-weight:600; font-size:15px; color:var(--ink); }
+
+  select.form-control,
+  input.form-control{
+    width:100%;
+    font-family:'IBM Plex Sans', sans-serif;
+    font-size:15px;
+    padding:10px 12px;
+    border:1.5px solid var(--paper-line);
+    border-radius:8px;
+    background:var(--paper);
+    color:var(--ink);
+    transition:border-color .18s ease, box-shadow .18s ease, background .18s ease;
+  }
+
+  select.form-control:hover,
+  input.form-control:hover{ border-color:#c4b98f; }
+
+  select.form-control:focus,
+  input.form-control:focus{
+    outline:none;
+    border-color:var(--blue);
+    background:var(--blue-soft);
+    box-shadow:0 0 0 4px rgba(41,85,163,.15);
+  }
+
+  option.placeholder{ color:var(--ink-soft); }
+
+  .submit-row{ margin-top:28px; display:flex; justify-content:center; }
+
+  .btn-predict,
+  .btn-secondary{
+    font-family:'IBM Plex Mono', monospace;
+    font-weight:600;
+    font-size:13px;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    border:none;
+    border-radius:999px;
+    padding:14px 34px;
+    cursor:pointer;
+    transition:transform .15s ease, box-shadow .15s ease, background-position .4s ease;
+    text-decoration:none;
+    display:inline-block;
+  }
+
+  .btn-predict{
+    color:var(--paper);
+    background:linear-gradient(120deg, var(--ink), var(--blue));
+    background-size:180% 180%;
+    background-position:0% 50%;
+    box-shadow:0 10px 24px -12px rgba(41,85,163,.55);
+  }
+
+  .btn-predict:hover{
+    background-position:100% 50%;
+    box-shadow:0 14px 30px -12px rgba(41,85,163,.7);
+    transform:translateY(-2px);
+  }
+  .btn-predict:active{ transform:scale(.96) translateY(0); }
+  .btn-predict:focus-visible{ outline:3px solid var(--blue); outline-offset:3px; }
+
+  .btn-secondary{
+    color:var(--ink);
+    background:transparent;
+    border:1.5px solid var(--paper-line);
+  }
+  .btn-secondary:hover{
+    border-color:var(--blue);
+    color:var(--blue);
+    transform:translateY(-2px);
+  }
+  .btn-secondary:focus-visible{ outline:3px solid var(--blue); outline-offset:3px; }
+
+  /* ---------- Result view ---------- */
+
+  .result-card{
+    text-align:center;
+  }
+
+  .result-eyebrow{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    color:var(--ink-soft);
+    margin:0 0 28px;
+  }
+
+  .ring{ --tier-color: var(--red); }
+  .ring.tier-excellent{ --tier-color: var(--green); }
+  .ring.tier-good{ --tier-color: var(--gold); }
+  .ring.tier-needs{ --tier-color: var(--red); }
+
+  .ring{
+    --pct: 0;
+    width:188px;
+    height:188px;
+    margin:0 auto;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:conic-gradient(var(--tier-color) calc(var(--pct) * 1%), var(--paper-line) 0);
+    animation:ring-in .6s ease both, spin-in .8s ease both;
+    position:relative;
+  }
+
+  @keyframes ring-in{ from{ opacity:0; } to{ opacity:1; } }
+  @keyframes spin-in{
+    from{ transform:rotate(-90deg) scale(.7); }
+    to{ transform:rotate(0deg) scale(1); }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .ring{ animation:none; }
+  }
+
+  .stamp{
+    width:150px;
+    height:150px;
+    border-radius:50%;
+    background:var(--card);
+    border:3px solid var(--tier-color);
+    color:var(--tier-color);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    font-family:'IBM Plex Mono', monospace;
+    transform:rotate(-6deg);
+  }
+
+  .stamp-score{ font-size:36px; font-weight:600; line-height:1; }
+
+  .stamp-label{
+    font-size:10px;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    margin-top:8px;
+    text-align:center;
+    padding:0 10px;
+  }
+
+  .stamp-tier{
+    font-size:10px;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    margin-top:3px;
+    font-weight:600;
+  }
+
+  .result-summary{
+    margin-top:30px;
+    color:var(--ink-soft);
+    font-size:14.5px;
+    line-height:1.6;
+    max-width:380px;
+    margin-left:auto;
+    margin-right:auto;
+  }
+
+  .result-actions{
+    margin-top:30px;
+    display:flex;
+    gap:14px;
+    justify-content:center;
+    flex-wrap:wrap;
+  }
+
+  .foot-note{ text-align:center; color:var(--ink-soft); font-size:12px; margin-top:28px; }
+</style>
+</head>
+<body>
+
+  <div class="sheet">
+    <span class="tab">Record No. 01</span>
+    <div class="card">
+
+      {% if results %}
+        {% set score = results|float %}
+        {% if score >= 80 %}
+          {% set tier_class = "tier-excellent" %}
+          {% set tier_name = "Excellent" %}
+          {% set tier_msg = "This record shows strong performance indicators across the board." %}
+        {% elif score >= 50 %}
+          {% set tier_class = "tier-good" %}
+          {% set tier_name = "Good" %}
+          {% set tier_msg = "A solid predicted result, with some room to grow." %}
+        {% else %}
+          {% set tier_class = "tier-needs" %}
+          {% set tier_name = "Needs Work" %}
+          {% set tier_msg = "This record suggests extra support could help improve outcomes." %}
+        {% endif %}
+
+        <div class="result-card">
+          <p class="result-eyebrow">Prediction complete</p>
+
+          <div class="ring {{ tier_class }}" data-pct="{{ score }}">
+            <div class="stamp">
+              <span class="stamp-score">{{ results }}</span>
+              <span class="stamp-label">Predicted&nbsp;Maths</span>
+              <span class="stamp-tier">{{ tier_name }}</span>
+            </div>
+          </div>
+
+          <p class="result-summary">{{ tier_msg }}</p>
+
+          <div class="result-actions">
+            <a class="btn-secondary" href="{{ url_for('predict_datapoint') }}">Grade another record</a>
+            <a class="btn-secondary" href="{{ url_for('index') }}">Back to grade book</a>
+          </div>
+        </div>
+
+      {% else %}
+
+        <h1 class="title">Student Exam Performance Indicator</h1>
+        <p class="subtitle">Fill in the record below to predict a Maths score from academic &amp; demographic inputs.</p>
+
+        <form action="{{ url_for('predict_datapoint') }}" method="post">
+
+          <div class="field-row">
+            <div>
+              <span class="field-index">01</span>
+              <label class="form-label">Gender</label>
+            </div>
+            <select class="form-control" name="gender" required>
+              <option class="placeholder" selected disabled value="">Select your gender</option>
+              <option value="male">Male</option>
+              <option value="female">Female</option>
+            </select>
+          </div>
+
+          <div class="field-row">
+            <div>
+              <span class="field-index">02</span>
+              <label class="form-label">Race or Ethnicity</label>
+            </div>
+            <select class="form-control" name="ethnicity" required>
+              <option class="placeholder" selected disabled value="">Select ethnicity</option>
+              <option value="group A">Group A</option>
+              <option value="group B">Group B</option>
+              <option value="group C">Group C</option>
+              <option value="group D">Group D</option>
+              <option value="group E">Group E</option>
+            </select>
+          </div>
+
+          <div class="field-row">
+            <div>
+              <span class="field-index">03</span>
+              <label class="form-label">Parental Education</label>
+            </div>
+            <select class="form-control" name="parental_level_of_education" required>
+              <option class="placeholder" selected disabled value="">Select parent education</option>
+              <option value="associate's degree">Associate's degree</option>
+              <option value="bachelor's degree">Bachelor's degree</option>
+              <option value="high school">High school</option>
+              <option value="master's degree">Master's degree</option>
+              <option value="some college">Some college</option>
+              <option value="some high school">Some high school</option>
+            </select>
+          </div>
+
+          <div class="field-row">
+            <div>
+              <span class="field-index">04</span>
+              <label class="form-label">Lunch Type</label>
+            </div>
+            <select class="form-control" name="lunch" required>
+              <option class="placeholder" selected disabled value="">Select lunch type</option>
+              <option value="free/reduced">Free / reduced</option>
+              <option value="standard">Standard</option>
+            </select>
+          </div>
+
+          <div class="field-row">
+            <div>
+              <span class="field-index">05</span>
+              <label class="form-label">Test Preparation</label>
+            </div>
+            <select class="form-control" name="test_preparation_course" required>
+              <option class="placeholder" selected disabled value="">Select course status</option>
+              <option value="none">None</option>
+              <option value="completed">Completed</option>
+            </select>
+          </div>
+
+          <div class="field-row">
+            <div>
+              <span class="field-index">06</span>
+              <label class="form-label">Reading Score</label>
+            </div>
+            <input class="form-control" type="number" name="reading_score"
+                   placeholder="Out of 100" min="0" max="100" required />
+          </div>
+
+          <div class="field-row">
+            <div>
+              <span class="field-index">07</span>
+              <label class="form-label">Writing Score</label>
+            </div>
+            <input class="form-control" type="number" name="writing_score"
+                   placeholder="Out of 100" min="0" max="100" required />
+          </div>
+
+          <div class="submit-row">
+            <input class="btn-predict" type="submit" value="Grade this record" />
+          </div>
+        </form>
+
+      {% endif %}
+
+    </div>
+    <p class="foot-note">Prediction is model-generated and for illustrative purposes only.</p>
+  </div>
+
+  <script>
+    document.querySelectorAll('.ring[data-pct]').forEach(function (el) {
+      var pct = parseFloat(el.getAttribute('data-pct'));
+      if (!isNaN(pct)) {
+        el.style.setProperty('--pct', pct);
+      }
+    });
+  </script>
+
+</body>
+</html>
